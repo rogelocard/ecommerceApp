@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ConceptsAndroidStudio</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bottom_navigation_color_selector" />
+    <string name="home">Inicio</string>
+    <string name="shopping_cart">Carrito</string>
+    <string name="account">Cuenta</string>
 </resources>

@@ -107,7 +107,7 @@
                 android:textColorHint="#603a91" />
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/signin"
                 android:layout_gravity="end"
                 android:layout_marginTop="16dp"
                 android:layout_width="wrap_content"
@@ -115,7 +115,7 @@
                 app:srcCompat="@drawable/btn_login" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/current_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"

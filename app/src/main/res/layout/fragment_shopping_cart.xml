@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ShoppingCartFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Imagen del carrito -->
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/confirmacion"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:fontFamily="sans-serif-black"
+                android:text="Confirmación de Pedido"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/direccion"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginBottom="10dp"
+            app:cardBackgroundColor="#DDA5FF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:background="@color/purple_light"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="Dirección de entrega"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:paddingLeft="10dp"
+                    android:text="+ Añadir Nueva dirección"
+                    android:textColor="#0000FF"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginBottom="10dp"
+            app:cardBackgroundColor="#DDA5FF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:background="@color/purple_light"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="Método de pago"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:paddingLeft="10dp"
+                    android:text="+ Agregar nuevo metodo de pago"
+                    android:textColor="#0000FF"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginBottom="10dp"
+            app:cardBackgroundColor="#DDA5FF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/apple"
+                    android:layout_margin="16dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="16dp"
+                        android:text="Portatil Macbook Air 2020 Chip M1 (13 Pulgadas 8Gb Ram 256Gb Ssd)"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="-   1    +"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="COP 3.709.000"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginBottom="10dp"
+            app:cardBackgroundColor="#DDA5FF">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:stretchColumns="*"
+                android:layout_marginLeft="10dp">
+
+
+
+                <!-- Primera fila -->
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/darker_gray"
+                        android:padding="8dp"
+                        android:text="Resumen"
+                        android:textSize="16dp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        android:padding="8dp"/>
+
+                </TableRow>
+
+                <!-- Segunda fila -->
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                    <!-- Celda 1 de la segunda fila -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/darker_gray"
+                        android:padding="8dp"
+                        android:text="Costo total de los artículos"
+                        android:textStyle="bold" />
+
+                    <!-- Celda 2 de la segunda fila -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        android:gravity="end"
+                        android:padding="8dp"
+                        android:text="COP 3.709.000"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+                <!-- Tercera fila -->
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- Celda 1 de la tercera fila -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Código promocional"
+                        android:padding="8dp"
+                        android:textStyle="bold"
+                        android:background="@android:color/darker_gray" />
+
+                    <!-- Celda 2 de la tercera fila -->
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        android:gravity="end"
+                        android:hint="Escribe el código aquí"
+                        android:padding="8dp"
+                        android:textColorHint="@android:color/darker_gray"
+                        android:textSize="14sp" />
+
+                </TableRow>
+
+                <!-- Cuarta fila -->
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- Celda 1 de la cuarta fila -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/darker_gray"
+                        android:padding="8dp"
+                        android:text="Total de envío"
+                        android:textStyle="bold" />
+
+                    <!-- Celda 2 de la cuarta fila -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        android:gravity="end"
+                        android:padding="8dp"
+                        android:text="Envío gratis"
+                        android:textColor="#000000" />
+
+                </TableRow>
+
+            </TableLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- Lista de productos en el carrito (puedes usar un RecyclerView aquí) -->
+        <!-- Aquí irían las tarjetas de cada producto en el carrito -->
+
+        <!-- Botón para vaciar el carrito -->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|center_horizontal">
+
+            <!-- Botón para proceder al pago -->
+            <Button
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/purple"
+                android:text="Vaciar Carrito"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/purple"
+                android:layout_marginBottom="16dp"
+                android:text="Proceder al Pago"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

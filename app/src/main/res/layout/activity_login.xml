@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff">
 
+
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="0dp"
@@ -74,12 +75,13 @@
                 android:padding="8dp"
                 android:drawablePadding="16dp"/>
 
-            <ImageView
-                android:id="@+id/imageView5"
+            <ImageButton
+                android:id="@+id/login"
                 android:layout_gravity="end"
                 android:layout_marginTop="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 app:srcCompat="@drawable/btn_login" />
 
             <Button
@@ -116,7 +118,7 @@
                 android:drawablePadding="16dp"/>
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/new_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="¿Eres usuario nuevo?"
