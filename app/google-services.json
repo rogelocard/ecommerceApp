@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "43840114755",
+    "project_id": "appnativas-e2b36",
+    "storage_bucket": "appnativas-e2b36.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43840114755:android:12f4221ee608dc2f55c4f6",
+        "android_client_info": {
+          "package_name": "com.example.conceptsandroidstudio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsx7HbUWNBOTtqyagwxcwTMldb5XVA208"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
