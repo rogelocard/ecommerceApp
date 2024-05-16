@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,6 +44,7 @@ public class PortatilesActivity extends AppCompatActivity {
         CollectionReference portatilesRef = db.collection("portatiles");
 
         // Obtener los documentos de la colección "portatiles"
+        Log.d(TAG, "Antes de abrir la función");
         portatilesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -54,12 +55,18 @@ public class PortatilesActivity extends AppCompatActivity {
                         String color = document.getString("color");
                         List<String> fotosUrls = (List<String>) document.get("fotos");
 
+                        // Imprimir los datos en la consola utilizando Log.d()
+                        Log.d(TAG, "Modelo: " + modelo);
+                        Log.d(TAG, "Color: " + color);
+                        Log.d(TAG, "Fotos URLs: " + fotosUrls);
                         // Mostrar los datos en la interfaz de usuario
                         mostrarDatos(modelo, color, fotosUrls);
                     }
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
+                    Toast.makeText(PortatilesActivity.this, "error", Toast.LENGTH_LONG).show();
                 }
+                Toast.makeText(PortatilesActivity.this, "Finaliza el for", Toast.LENGTH_LONG).show();
             }
         });
     }
