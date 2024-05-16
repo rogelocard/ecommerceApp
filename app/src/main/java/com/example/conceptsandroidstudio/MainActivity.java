@@ -17,20 +17,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_intro);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        setContentView(R.layout.activity_portatiles);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.portatiles), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        Button introButton = findViewById(R.id.intro);
-        introButton.setOnClickListener(new View.OnClickListener() {
+        /*
+        Button loginButton = findViewById(R.id.login);
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
+
+        Button signupButton = findViewById(R.id.signup);
+        signupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SignupActivity.class);
+                startActivity(intent);
+            }
+        });*/
     }
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:id="@+id/portatiles"
+    tools:context=".PortatilesActivity">
+
+    <TextView
+        android:id="@+id/modeloTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modelo"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/colorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/modeloTextView"
+        android:layout_marginTop="8dp"
+        android:text="Color"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/fotoImageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_below="@id/colorTextView"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/placeholder_image" />
+
+</RelativeLayout>

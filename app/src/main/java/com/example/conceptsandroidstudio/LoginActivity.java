@@ -50,9 +50,6 @@ public class LoginActivity extends AppCompatActivity{
                     loginUser(emailuser, pasword_user);
 
                 }
-
-
-
             }
         });
 
@@ -78,12 +75,5 @@ public class LoginActivity extends AppCompatActivity{
                 Toast.makeText(LoginActivity.this, "Error al iniciar Sesión", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-
-
-
     }
-
 }
