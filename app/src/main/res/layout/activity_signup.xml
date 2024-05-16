@@ -48,12 +48,13 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/editTextTextName"
+                android:id="@+id/namereg"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
+                android:textColor="#000000"
                 android:background="@drawable/edittext_background"
                 android:drawableStart="@drawable/name"
                 android:drawablePadding="16dp"
@@ -64,12 +65,13 @@
                 android:textColorHint="#603a91" />
 
             <EditText
-                android:id="@+id/editTextTextUsername"
+                android:id="@+id/emailreg"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
+                android:textColor="#000000"
                 android:background="@drawable/edittext_background"
                 android:drawableStart="@drawable/email"
                 android:drawablePadding="16dp"
@@ -80,10 +82,11 @@
                 android:textColorHint="#603a91" />
 
             <EditText
-                android:id="@+id/editTextTextpassword"
+                android:id="@+id/password_reg"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/edittext_background"
+                android:textColor="#000000"
                 android:drawableStart="@drawable/password"
                 android:textColorHint="#603a91"
                 android:ems="10"
@@ -95,12 +98,13 @@
                 android:drawablePadding="16dp"/>
 
             <EditText
-                android:id="@+id/editTextTextrepassword"
+                android:id="@+id/password_cof"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/edittext_background"
+                android:textColor="#000000"
                 android:drawableStart="@drawable/password"
                 android:drawablePadding="16dp"
                 android:ems="10"
@@ -109,12 +113,13 @@
                 android:padding="8dp"
                 android:textColorHint="#603a91" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/signupButton"
                 android:layout_gravity="end"
                 android:layout_marginTop="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 app:srcCompat="@drawable/btn_login" />
 
             <TextView

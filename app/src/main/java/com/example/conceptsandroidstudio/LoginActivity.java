@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity{
                 String emailuser = email.getText().toString().trim();
                 String pasword_user = pasword.getText().toString().trim();
 
-                if(emailuser.isEmpty() && pasword_user.isEmpty()){
+                if(emailuser.isEmpty() || pasword_user.isEmpty()){
                     Toast.makeText(LoginActivity.this,"Porfavor Ingresar los Datos", Toast.LENGTH_SHORT).show();
                 }
 
