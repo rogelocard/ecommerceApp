@@ -61,6 +61,7 @@ public class PortatilesActivity extends AppCompatActivity {
                         Log.d(TAG, "Fotos URLs: " + fotosUrls);
                         // Mostrar los datos en la interfaz de usuario
                         mostrarDatos(modelo, color, fotosUrls);
+                        break;
                     }
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
