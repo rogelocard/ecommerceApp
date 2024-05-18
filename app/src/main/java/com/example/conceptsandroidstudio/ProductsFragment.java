@@ -161,8 +161,8 @@ public class ProductsFragment extends Fragment {
 
         if (fotosUrls != null && !fotosUrls.isEmpty()) {
             String primeraUrlFoto = fotosUrls.get(0);
-            Coil.load(getContext(), primeraUrlFoto) {
-                placeholder(R.drawable.placeholder_image) // Imagen de placeholder
+            Coil.load(getContext(), primeraUrlFoto); {
+                placeholder(R.drawable.placeholder_image); // Imagen de placeholder
                 // Otras configuraciones, como el tamaño de la imagen, ajuste, etc.
                 target { drawable ->
                         // Actualizar la imagen en el ImageView
