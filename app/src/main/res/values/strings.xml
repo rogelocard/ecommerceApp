@@ -6,4 +6,8 @@
     <string name="home">Inicio</string>
     <string name="shopping_cart">Carrito</string>
     <string name="account">Cuenta</string>
+    <string name="image_description">Descripción de la imagen</string>
+    <string name="product_name">Nombre del producto</string>
+    <string name="product_price">Precio del producto</string>
+
 </resources>

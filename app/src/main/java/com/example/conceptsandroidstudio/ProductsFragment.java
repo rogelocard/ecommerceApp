@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -120,74 +121,28 @@ public class ProductsFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    int contador = 1;
+                    List<Product> productList = new ArrayList<>();
                     for (QueryDocumentSnapshot document : task.getResult()) {
-
-                        // Obtener los datos de cada documento
                         String marca = document.getString("marca");
                         String modelo = document.getString("modelo");
                         Long precio = document.getLong("precio");
                         List<String> fotosUrls = (List<String>) document.get("fotos");
 
-                        // Mostrar los datos en la interfaz de usuario
-                        mostrarDatos(modelo, marca, precio, fotosUrls, contador);
-                        contador++;
+                        productList.add(new Product(modelo, marca, precio, fotosUrls));
                     }
+                    setupProductsRecyclerView(productList);
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
-                    Toast.makeText(getContext(), "error", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Error obteniendo documentos", Toast.LENGTH_LONG).show();
                 }
-                Toast.makeText(getActivity(), "Finaliza el for", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Datos cargados", Toast.LENGTH_LONG).show();
             }
         });
     }
-    private void mostrarDatos(String modelo, String marca, Long precio, List<String> fotosUrls, int contador) {
-
-        // Obtén el ID dinámico basado en el contador
-        String textViewIdName = "nombreProducto" + contador;
-        int textViewId = getResources().getIdentifier(textViewIdName, "id", getContext().getPackageName());
-        String imageViewIdName= "imageProducto" + contador;
-        int imageViewId = getResources().getIdentifier(imageViewIdName, "id", getContext().getPackageName());
-        String priceViewIdName = "precioProducto" + contador;
-        int priceViewId = getResources().getIdentifier(priceViewIdName, "id", getContext().getPackageName());
-
-        // Referencias a los elementos de la interfaz de usuario
-        TextView nombreTextView = rootView.findViewById(textViewId);
-        TextView precioTextView = rootView.findViewById(priceViewId);
-        ImageView fotoImageView = rootView.findViewById(imageViewId);
-
-        // Formatear el precio y establecer el precio
-        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
-        String precioFormateado = numberFormat.format(precio);
-        precioTextView.setText(precioFormateado);
-
-        // Concatenar titulo y establecer el texto
-        String finalText = marca + " " + modelo;
-        nombreTextView.setText(finalText);
-
-        /*
-        if (fotosUrls != null && !fotosUrls.isEmpty()) {
-            String primeraUrlFoto = fotosUrls.get(0);
-
-            ImageRequest request = new ImageRequest.Builder(getContext())
-                    .data(primeraUrlFoto)
-                    .target(fotoImageView)
-                    .placeholder(R.drawable.placeholder_image) // Imagen de placeholder
-                    .build();
-
-            Coil.imageLoader(getContext()).enqueue(request);
-        }*/
-
-        // Mostrar la primera foto en el ImageView usando Glide
-        if (fotosUrls != null && fotosUrls.size() > 0) {
-            String primeraUrlFoto = fotosUrls.get(0);
-            Glide.with(getContext())
-                    .load(primeraUrlFoto)
-                    .apply(new RequestOptions()
-                            .placeholder(R.drawable.placeholder_image)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .fitCenter())
-                    .into(fotoImageView);
-        }
+    private void setupProductsRecyclerView(List<Product> productList) {
+        RecyclerView productsRecyclerView = rootView.findViewById(R.id.productsRecyclerView);
+        productsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        ProductsAdapter productsAdapter = new ProductsAdapter(productList);
+        productsRecyclerView.setAdapter(productsAdapter);
     }
 }
