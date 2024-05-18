@@ -25,13 +25,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-import androidx.fragment.app.Fragment;
-import android.widget.ImageView;
 import coil.Coil;
-import coil.api.load;
+import coil.request.ImageRequest;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -87,92 +88,98 @@ public class ProductsFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
     }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            rootView = inflater.inflate(R.layout.fragment_products, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_products, container, false);
 
-            RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
-            List<MyItem> itemList = new ArrayList<>();
-            itemList.add(new MyItem(R.drawable.image_portatil, "Pc"));
-            itemList.add(new MyItem(R.drawable.image_tv, "Tv"));
-            itemList.add(new MyItem(R.drawable.image_celular, "Celulares"));
-            itemList.add(new MyItem(R.drawable.image_reloj, "Relojes"));
-            itemList.add(new MyItem(R.drawable.image_accesorios, "Accesorios"));
+        List<MyItem> itemList = new ArrayList<>();
+        itemList.add(new MyItem(R.drawable.image_portatil, "Pc"));
+        itemList.add(new MyItem(R.drawable.image_tv, "Tv"));
+        itemList.add(new MyItem(R.drawable.image_celular, "Celulares"));
+        itemList.add(new MyItem(R.drawable.image_reloj, "Relojes"));
+        itemList.add(new MyItem(R.drawable.image_accesorios, "Accesorios"));
 
-            MyAdapter adapter = new MyAdapter(itemList);
-            recyclerView.setAdapter(adapter);
+        MyAdapter adapter = new MyAdapter(itemList);
+        recyclerView.setAdapter(adapter);
 
-            obtenerDatosDeFirestore();
+        obtenerDatosDeFirestore();
 
-            return rootView;
-        }
+        return rootView;
+    }
 
-        private void obtenerDatosDeFirestore(){
-            // Obtener una referencia a la colección "portatiles" en Firebase Firestore
-            CollectionReference portatilesRef = db.collection("portatiles");
+    private void obtenerDatosDeFirestore(){
+        // Obtener una referencia a la colección "portatiles" en Firebase Firestore
+        CollectionReference portatilesRef = db.collection("portatiles");
 
-            // Obtener los documentos de la colección "portatiles"
-            Log.d(TAG, "Antes de abrir la función");
-            portatilesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        Integer contador = 1;
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            // Obtener los datos de cada documento
+        // Obtener los documentos de la colección "portatiles"
+        Log.d(TAG, "Antes de abrir la función");
+        portatilesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    int contador = 1;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
 
-                            String marca = document.getString("marca");
-                            String modelo = document.getString("modelo");
-                            List<String> fotosUrls = (List<String>) document.get("fotos");
+                        // Obtener los datos de cada documento
+                        String marca = document.getString("marca");
+                        String modelo = document.getString("modelo");
+                        Long precio = document.getLong("precio");
+                        List<String> fotosUrls = (List<String>) document.get("fotos");
 
-                            // Imprimir los datos en la consola utilizando Log.d()
-                            Log.d(TAG, "Modelo: " + modelo);
-                            Log.d(TAG, "Marca: " + marca);
-                            Log.d(TAG, "Fotos URLs: " + fotosUrls);
-                            // Mostrar los datos en la interfaz de usuario
-                            mostrarDatos(modelo, marca, fotosUrls, contador);
-                            contador = contador + 1;
-                        }
-                    } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
-                        Toast.makeText(getContext(), "error", Toast.LENGTH_LONG).show();
+                        // Mostrar los datos en la interfaz de usuario
+                        mostrarDatos(modelo, marca, precio, fotosUrls, contador);
+                        contador++;
                     }
-                    Toast.makeText(getActivity(), "Finaliza el for", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                    Toast.makeText(getContext(), "error", Toast.LENGTH_LONG).show();
                 }
-            });
-        }
-    private void mostrarDatos(String modelo, String marca, List<String> fotosUrls, Integer contador) {
+                Toast.makeText(getActivity(), "Finaliza el for", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    private void mostrarDatos(String modelo, String marca, Long precio, List<String> fotosUrls, int contador) {
 
         // Obtén el ID dinámico basado en el contador
         String textViewIdName = "nombreProducto" + contador;
-        Integer textViewId = getResources().getIdentifier(textViewIdName, "id", getContext().getPackageName());
+        int textViewId = getResources().getIdentifier(textViewIdName, "id", getContext().getPackageName());
         String imageViewIdName= "imageProducto" + contador;
-        Integer imageViewId = getResources().getIdentifier(imageViewIdName, "id", getContext().getPackageName());
+        int imageViewId = getResources().getIdentifier(imageViewIdName, "id", getContext().getPackageName());
+        String priceViewIdName = "precioProducto" + contador;
+        int priceViewId = getResources().getIdentifier(priceViewIdName, "id", getContext().getPackageName());
 
         // Referencias a los elementos de la interfaz de usuario
         TextView nombreTextView = rootView.findViewById(textViewId);
+        TextView precioTextView = rootView.findViewById(priceViewId);
         ImageView fotoImageView = rootView.findViewById(imageViewId);
 
-        // Mostrar modelo y color en los TextViews
-        nombreTextView.setText(marca + " " + modelo);
+        // Formatear el precio y establecer el precio
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
+        String precioFormateado = numberFormat.format(precio);
+        precioTextView.setText(precioFormateado);
 
+        // Concatenar titulo y establecer el texto
+        String finalText = marca + " " + modelo;
+        nombreTextView.setText(finalText);
 
+        /*
         if (fotosUrls != null && !fotosUrls.isEmpty()) {
             String primeraUrlFoto = fotosUrls.get(0);
-            Coil.load(getContext(), primeraUrlFoto); {
-                placeholder(R.drawable.placeholder_image); // Imagen de placeholder
-                // Otras configuraciones, como el tamaño de la imagen, ajuste, etc.
-                target { drawable ->
-                        // Actualizar la imagen en el ImageView
-                        fotoImageView.setImageDrawable(drawable)
-                }
-            }
-        }
+
+            ImageRequest request = new ImageRequest.Builder(getContext())
+                    .data(primeraUrlFoto)
+                    .target(fotoImageView)
+                    .placeholder(R.drawable.placeholder_image) // Imagen de placeholder
+                    .build();
+
+            Coil.imageLoader(getContext()).enqueue(request);
+        }*/
 
         // Mostrar la primera foto en el ImageView usando Glide
-        /*if (fotosUrls != null && fotosUrls.size() > 0) {
+        if (fotosUrls != null && fotosUrls.size() > 0) {
             String primeraUrlFoto = fotosUrls.get(0);
             Glide.with(getContext())
                     .load(primeraUrlFoto)
@@ -181,6 +188,6 @@ public class ProductsFragment extends Fragment {
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .fitCenter())
                     .into(fotoImageView);
-        }*/
+        }
     }
 }
