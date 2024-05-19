@@ -2,20 +2,37 @@ package com.example.conceptsandroidstudio;
 
 import java.util.List;
 
-public class Product {
+import java.io.Serializable;
+import java.util.List;
+
+public class Product implements Serializable {
     private String marca;
     private String modelo;
     private Long precio;
     private List<String> fotosUrls;
+    private String procesador;
+    private String ram;
+    private String rom;
+    private String color;
+    private String sistemaOperativo;
+    private String pantalla;
 
     public Product() {
     }
 
-    public Product(String marca, String modelo, Long precio, List<String> fotosUrls) {
+    public Product(String marca, String modelo, Long precio, List<String> fotosUrls,
+                   String procesador, String ram, String rom, String color,
+                   String sistemaOperativo, String pantalla) {
         this.marca = marca;
         this.modelo = modelo;
         this.precio = precio;
         this.fotosUrls = fotosUrls;
+        this.procesador = procesador;
+        this.ram = ram;
+        this.rom = rom;
+        this.color = color;
+        this.sistemaOperativo = sistemaOperativo;
+        this.pantalla = pantalla;
     }
 
     public String getMarca() {
@@ -48,5 +65,53 @@ public class Product {
 
     public void setFotosUrls(List<String> fotosUrls) {
         this.fotosUrls = fotosUrls;
+    }
+
+    public String getProcesador() {
+        return procesador;
+    }
+
+    public void setProcesador(String procesador) {
+        this.procesador = procesador;
+    }
+
+    public String getRam() {
+        return ram;
+    }
+
+    public void setRam(String ram) {
+        this.ram = ram;
+    }
+
+    public String getRom() {
+        return rom;
+    }
+
+    public void setRom(String rom) {
+        this.rom = rom;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getSistemaOperativo() {
+        return sistemaOperativo;
+    }
+
+    public void setSistemaOperativo(String sistemaOperativo) {
+        this.sistemaOperativo = sistemaOperativo;
+    }
+
+    public String getPantalla() {
+        return pantalla;
+    }
+
+    public void setPantalla(String pantalla) {
+        this.pantalla = pantalla;
     }
 }

@@ -21,6 +21,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -50,6 +51,7 @@ public class ProductsFragment extends Fragment {
 
     private View rootView;
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -87,6 +89,7 @@ public class ProductsFragment extends Fragment {
 
         // Inicializar Firebase Firestore
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -116,7 +119,6 @@ public class ProductsFragment extends Fragment {
         CollectionReference portatilesRef = db.collection("portatiles");
 
         // Obtener los documentos de la colección "portatiles"
-        Log.d(TAG, "Antes de abrir la función");
         portatilesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -127,8 +129,19 @@ public class ProductsFragment extends Fragment {
                         String modelo = document.getString("modelo");
                         Long precio = document.getLong("precio");
                         List<String> fotosUrls = (List<String>) document.get("fotos");
+                        String procesador = document.getString("procesador");
+                        String ram = document.getString("ram");
+                        String rom = document.getString("rom");
+                        String color = document.getString("color");
+                        String sistemaOperativo = document.getString("sistemaOperativo");
+                        String pantalla = document.getString("pantalla");
 
-                        productList.add(new Product(modelo, marca, precio, fotosUrls));
+                        // Crear un nuevo objeto Product con todos los campos
+                        Product product = new Product(marca, modelo, precio, fotosUrls,
+                                procesador, ram, rom, color,
+                                sistemaOperativo, pantalla);
+
+                        productList.add(product);
                     }
                     setupProductsRecyclerView(productList);
                 } else {
@@ -144,5 +157,10 @@ public class ProductsFragment extends Fragment {
         productsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         ProductsAdapter productsAdapter = new ProductsAdapter(productList);
         productsRecyclerView.setAdapter(productsAdapter);
+    }
+
+    private void showProductDetails(Product product) {
+        // Aquí implementaremos la lógica para mostrar la pantalla superpuesta con los detalles del producto
+        // Puedes crear un nuevo Fragment o un DialogFragment para mostrar esta información
     }
 }

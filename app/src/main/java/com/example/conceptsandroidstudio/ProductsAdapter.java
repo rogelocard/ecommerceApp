@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -20,9 +21,11 @@ import java.util.Locale;
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ProductViewHolder> {
 
     private List<Product> productList;
+    private OnAddToCartClickListener onAddToCartClickListener;
 
     public ProductsAdapter(List<Product> productList) {
         this.productList = productList;
+        this.onAddToCartClickListener = onAddToCartClickListener;
     }
 
     @NonNull
@@ -36,6 +39,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
         holder.bind(product);
+        holder.fabAddToCart.setOnClickListener(v -> onAddToCartClickListener.onAddToCartClick(product));
     }
 
     @Override
@@ -48,12 +52,14 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
         private TextView nombreTextView;
         private TextView precioTextView;
         private ImageView fotoImageView;
+        private FloatingActionButton fabAddToCart;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             nombreTextView = itemView.findViewById(R.id.nombreProducto);
             precioTextView = itemView.findViewById(R.id.precioProducto);
             fotoImageView = itemView.findViewById(R.id.imageProducto);
+            fabAddToCart = itemView.findViewById(R.id.fabAddToCart);
         }
 
         public void bind(Product product) {
@@ -74,5 +80,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
                         .into(fotoImageView);
             }
         }
+    }
+    public interface OnAddToCartClickListener {
+        void onAddToCartClick(Product product);
     }
 }
