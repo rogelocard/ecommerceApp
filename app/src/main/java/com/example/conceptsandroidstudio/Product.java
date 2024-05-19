@@ -16,13 +16,14 @@ public class Product implements Serializable {
     private String color;
     private String sistemaOperativo;
     private int pantalla;
+    private String id;
 
     public Product() {
     }
 
     public Product(String marca, String modelo, Long precio, List<String> fotosUrls,
                    String procesador, String ram, String rom, String color,
-                   String sistemaOperativo, int pantalla) {
+                   String sistemaOperativo, int pantalla, String id) {
         this.marca = marca;
         this.modelo = modelo;
         this.precio = precio;
@@ -33,6 +34,7 @@ public class Product implements Serializable {
         this.color = color;
         this.sistemaOperativo = sistemaOperativo;
         this.pantalla = pantalla;
+        this.id=id;
     }
 
     public String getMarca() {
@@ -112,5 +114,9 @@ public class Product implements Serializable {
     }
     public void setPantalla(int pantalla) {
         this.pantalla = pantalla;
+    }
+
+    public String getId() {
+        return id;
     }
 }

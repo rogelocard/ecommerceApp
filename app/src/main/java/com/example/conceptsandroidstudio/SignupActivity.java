@@ -83,10 +83,6 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
     }
 
     private void registrouser(String nameuser, String emailuser, String paswordUser) {

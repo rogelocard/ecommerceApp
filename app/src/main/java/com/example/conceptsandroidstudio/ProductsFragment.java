@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -140,11 +141,12 @@ public class ProductsFragment extends Fragment {
                         String sistemaOperativo = document.getString("sistemaOpe");
                         Long pantallaLong = document.getLong("pantalla");
                         int pantalla = pantallaLong != null ? pantallaLong.intValue() : 0;
+                        String id = document.getString("id");
 
                         // Crear un nuevo objeto Product con todos los campos
                         Product product = new Product(marca, modelo, precio, fotosUrls,
                                 procesador, ram, rom, color,
-                                sistemaOperativo, pantalla);
+                                sistemaOperativo, pantalla, id);
 
                         productList.add(product);
                     }
@@ -171,7 +173,7 @@ public class ProductsFragment extends Fragment {
             // Mostrar detalles del producto
             showProductDetails(product);
             // O agregar directamente al carrito, dependiendo de tu flujo
-            //addToCart(product);
+            addToCart(product);
         });
         productsRecyclerView.setAdapter(productsAdapter);
     }
@@ -181,22 +183,44 @@ public class ProductsFragment extends Fragment {
         detailFragment.show(getChildFragmentManager(), "ProductDetailFragment");
     }
 
-    /*
     private void addToCart(Product product) {
         String userId = mAuth.getCurrentUser().getUid();
-        DocumentReference userCartRef = db.collection("users").document(userId).collection("cart").document(product.getModelo());
+        DocumentReference userCartRef = db.collection("user").document(userId).collection("cart").document(product.getId());
 
-        Map<String, Object> cartItem = new HashMap<>();
-        cartItem.put("id", product.getModelo());
-        cartItem.put("precio", product.getPrecio());
-        cartItem.put("cantidad", 1);
-
-        userCartRef.set(cartItem).addOnCompleteListener(task -> {
+        userCartRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(getContext(), "Producto añadido al carrito", Toast.LENGTH_SHORT).show();
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    // El producto ya existe en el carrito del usuario, actualizar la cantidad
+                    int cantidadActual = document.getLong("cantidad").intValue();
+                    int nuevaCantidad = cantidadActual + 1;
+
+                    userCartRef.update("cantidad", nuevaCantidad).addOnCompleteListener(updateTask -> {
+                        if (updateTask.isSuccessful()) {
+                            Toast.makeText(getContext(), "Cantidad actualizada en el carrito", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Error al actualizar la cantidad en el carrito", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    // El producto no existe en el carrito del usuario, agregarlo
+                    Map<String, Object> cartItem = new HashMap<>();
+                    cartItem.put("id",product.getId());
+                    cartItem.put("modelo", product.getModelo());
+                    cartItem.put("precio", product.getPrecio());
+                    cartItem.put("cantidad", 1);
+
+                    userCartRef.set(cartItem).addOnCompleteListener(addTask -> {
+                        if (addTask.isSuccessful()) {
+                            Toast.makeText(getContext(), "Producto añadido al carrito", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Error al añadir al carrito", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             } else {
-                Toast.makeText(getContext(), "Error al añadir al carrito", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error al verificar el carrito", Toast.LENGTH_SHORT).show();
             }
         });
-    }*/
+    }
 }
