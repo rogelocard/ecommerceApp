@@ -15,14 +15,14 @@ public class Product implements Serializable {
     private String rom;
     private String color;
     private String sistemaOperativo;
-    private String pantalla;
+    private int pantalla;
 
     public Product() {
     }
 
     public Product(String marca, String modelo, Long precio, List<String> fotosUrls,
                    String procesador, String ram, String rom, String color,
-                   String sistemaOperativo, String pantalla) {
+                   String sistemaOperativo, int pantalla) {
         this.marca = marca;
         this.modelo = modelo;
         this.precio = precio;
@@ -107,11 +107,10 @@ public class Product implements Serializable {
         this.sistemaOperativo = sistemaOperativo;
     }
 
-    public String getPantalla() {
+    public int getPantalla() {
         return pantalla;
     }
-
-    public void setPantalla(String pantalla) {
+    public void setPantalla(int pantalla) {
         this.pantalla = pantalla;
     }
 }

@@ -23,9 +23,16 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
     private List<Product> productList;
     private OnAddToCartClickListener onAddToCartClickListener;
 
+    public interface OnAddToCartClickListener {
+        void onAddToCartClick(Product product);
+    }
+
+    public void setOnAddToCartClickListener(OnAddToCartClickListener listener) {
+        this.onAddToCartClickListener = listener;
+    }
+
     public ProductsAdapter(List<Product> productList) {
         this.productList = productList;
-        this.onAddToCartClickListener = onAddToCartClickListener;
     }
 
     @NonNull
@@ -39,7 +46,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
         holder.bind(product);
-        holder.fabAddToCart.setOnClickListener(v -> onAddToCartClickListener.onAddToCartClick(product));
+        holder.fabAddToCart.setOnClickListener(v -> {
+            if (onAddToCartClickListener != null) {
+                onAddToCartClickListener.onAddToCartClick(product);
+            }
+        });
     }
 
     @Override
@@ -64,7 +75,6 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
 
         public void bind(Product product) {
             nombreTextView.setText(product.getModelo() + " " + product.getMarca());
-
             NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
             String precioFormateado = numberFormat.format(product.getPrecio());
             precioTextView.setText(precioFormateado);
@@ -80,8 +90,5 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
                         .into(fotoImageView);
             }
         }
-    }
-    public interface OnAddToCartClickListener {
-        void onAddToCartClick(Product product);
     }
 }

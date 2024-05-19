@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -61,9 +62,11 @@ public class ProductDetailFragment extends DialogFragment {
         romTextView.setText(product.getRom());
         colorTextView.setText(product.getColor());
         sistemaOperativoTextView.setText(product.getSistemaOperativo());
-        pantallaTextView.setText(product.getPantalla());
+        pantallaTextView.setText(String.valueOf(product.getPantalla()));
 
         // Implementar la lógica del carrusel de fotos y los botones de navegación
+        ImageButton closeButton = view.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(v -> dismiss());
 
         Button irAlCarritoButton = view.findViewById(R.id.irAlCarritoButton);
         Button seguirComprandoButton = view.findViewById(R.id.seguirComprandoButton);
@@ -71,7 +74,9 @@ public class ProductDetailFragment extends DialogFragment {
         irAlCarritoButton.setOnClickListener(v -> {
             // Redirigir a ShoppingCartFragment
             dismiss();
-            ((MainActivity) getActivity()).navigateToShoppingCart();
+            if (getActivity() instanceof MenuActivity) {
+                ((MenuActivity) getActivity()).navigateToShoppingCart();
+            }
         });
 
         seguirComprandoButton.setOnClickListener(v -> dismiss());

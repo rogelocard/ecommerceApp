@@ -132,14 +132,14 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/goToCartButton"
+            android:id="@+id/irAlCarritoButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Ir a carrito" />
 
         <Button
-            android:id="@+id/continueShoppingButton"
+            android:id="@+id/seguirComprandoButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

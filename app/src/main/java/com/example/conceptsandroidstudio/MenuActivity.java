@@ -23,6 +23,7 @@ public class MenuActivity extends AppCompatActivity{
     ProductsFragment productsFragment = new ProductsFragment();
     ShoppingCartFragment shoppingCartFragment = new ShoppingCartFragment();
     AccountFragment accountFragment = new AccountFragment();
+    BottomNavigationView navigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class MenuActivity extends AppCompatActivity{
             return insets;
         });
 
-        BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
+        navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
@@ -64,5 +65,9 @@ public class MenuActivity extends AppCompatActivity{
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_container, fragment);
         transaction.commit();
+    }
+
+    public void navigateToShoppingCart() {
+        navigation.setSelectedItemId(R.id.shoppingCartFragment);
     }
 }

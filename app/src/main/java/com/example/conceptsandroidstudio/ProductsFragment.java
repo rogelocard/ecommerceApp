@@ -1,5 +1,6 @@
 package com.example.conceptsandroidstudio;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,14 +24,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import coil.Coil;
 import coil.request.ImageRequest;
@@ -133,8 +137,9 @@ public class ProductsFragment extends Fragment {
                         String ram = document.getString("ram");
                         String rom = document.getString("rom");
                         String color = document.getString("color");
-                        String sistemaOperativo = document.getString("sistemaOperativo");
-                        String pantalla = document.getString("pantalla");
+                        String sistemaOperativo = document.getString("sistemaOpe");
+                        Long pantallaLong = document.getLong("pantalla");
+                        int pantalla = pantallaLong != null ? pantallaLong.intValue() : 0;
 
                         // Crear un nuevo objeto Product con todos los campos
                         Product product = new Product(marca, modelo, precio, fotosUrls,
@@ -144,11 +149,17 @@ public class ProductsFragment extends Fragment {
                         productList.add(product);
                     }
                     setupProductsRecyclerView(productList);
+                    Context context = getContext();
+                    if (context != null) {
+                        Toast.makeText(context, "Datos cargados", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
-                    Toast.makeText(getContext(), "Error obteniendo documentos", Toast.LENGTH_LONG).show();
+                    Context context = getContext();
+                    if (context != null) {
+                        Toast.makeText(context, "Error obteniendo documentos", Toast.LENGTH_LONG).show();
+                    }
                 }
-                Toast.makeText(getActivity(), "Datos cargados", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -156,11 +167,36 @@ public class ProductsFragment extends Fragment {
         RecyclerView productsRecyclerView = rootView.findViewById(R.id.productsRecyclerView);
         productsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         ProductsAdapter productsAdapter = new ProductsAdapter(productList);
+        productsAdapter.setOnAddToCartClickListener(product -> {
+            // Mostrar detalles del producto
+            showProductDetails(product);
+            // O agregar directamente al carrito, dependiendo de tu flujo
+            //addToCart(product);
+        });
         productsRecyclerView.setAdapter(productsAdapter);
     }
 
     private void showProductDetails(Product product) {
-        // Aquí implementaremos la lógica para mostrar la pantalla superpuesta con los detalles del producto
-        // Puedes crear un nuevo Fragment o un DialogFragment para mostrar esta información
+        ProductDetailFragment detailFragment = ProductDetailFragment.newInstance(product);
+        detailFragment.show(getChildFragmentManager(), "ProductDetailFragment");
     }
+
+    /*
+    private void addToCart(Product product) {
+        String userId = mAuth.getCurrentUser().getUid();
+        DocumentReference userCartRef = db.collection("users").document(userId).collection("cart").document(product.getModelo());
+
+        Map<String, Object> cartItem = new HashMap<>();
+        cartItem.put("id", product.getModelo());
+        cartItem.put("precio", product.getPrecio());
+        cartItem.put("cantidad", 1);
+
+        userCartRef.set(cartItem).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(getContext(), "Producto añadido al carrito", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Error al añadir al carrito", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }*/
 }
