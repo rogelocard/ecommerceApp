@@ -6,17 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.bumptech.glide.Glide;
 
 import java.io.Serializable;
 
 public class ProductDetailFragment extends DialogFragment {
 
     private Product product;
+    private ViewFlipper photoFlipper;
 
     public ProductDetailFragment() {
         // Required empty public constructor
@@ -64,10 +69,24 @@ public class ProductDetailFragment extends DialogFragment {
         sistemaOperativoTextView.setText(product.getSistemaOperativo());
         pantallaTextView.setText(String.valueOf(product.getPantalla()));
 
-        // Implementar la lógica del carrusel de fotos y los botones de navegación
+        // Inicializar ViewFlipper y botones de navegación
+        photoFlipper = view.findViewById(R.id.photoFlipper);
+        ImageButton prevButton = view.findViewById(R.id.prevButton);
+        ImageButton nextButton = view.findViewById(R.id.nextButton);
+
+        // Configurar ViewFlipper con las imágenes del producto
+        setupPhotoFlipper();
+
+        // Manejar navegación del carrusel
+        prevButton.setOnClickListener(v -> photoFlipper.showPrevious());
+        nextButton.setOnClickListener(v -> photoFlipper.showNext());
+
+
+        //Configurar botón de cerrar pantalla
         ImageButton closeButton = view.findViewById(R.id.closeButton);
         closeButton.setOnClickListener(v -> dismiss());
 
+        //Configurar botones de ir al carrito de compra o seguir comprando
         Button irAlCarritoButton = view.findViewById(R.id.irAlCarritoButton);
         Button seguirComprandoButton = view.findViewById(R.id.seguirComprandoButton);
 
@@ -82,5 +101,17 @@ public class ProductDetailFragment extends DialogFragment {
         seguirComprandoButton.setOnClickListener(v -> dismiss());
 
         return view;
+    }
+    private void setupPhotoFlipper() {
+        if (product.getFotosUrls() != null) {
+            for (String imageUrl : product.getFotosUrls()) {
+                ImageView imageView = new ImageView(getContext());
+                Glide.with(this)
+                        .load(imageUrl)
+                        .into(imageView);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                photoFlipper.addView(imageView);
+            }
+        }
     }
 }
