@@ -93,7 +93,7 @@ public class SignupActivity extends AppCompatActivity {
                 Map<String, Object> map = new HashMap<>();
                 map.put("id",id);
                 map.put("Nombre",nameuser);
-                map.put("Password",paswordUser);
+//                map.put("Password",paswordUser);
                 map.put("Email",emailuser);
 
                 db.collection("user").document(id).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
