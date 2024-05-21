@@ -1,12 +1,30 @@
 package com.example.conceptsandroidstudio;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +32,11 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class ShoppingCartFragment extends Fragment {
+
+    private RecyclerView cartRecyclerView;
+    private CartAdapter cartAdapter;
+    private List<CartItem> cartItemList;
+    private TextView valorTotalTextView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,6 +69,48 @@ public class ShoppingCartFragment extends Fragment {
         return fragment;
     }
 
+
+    private void obtenerDatosDelCarrito() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        CollectionReference cartRef = FirebaseFirestore.getInstance().collection("user").document(userId).collection("cart");
+
+        // Agregar SnapshotListener para escuchar cambios en tiempo real
+        cartRef.addSnapshotListener((snapshots, e) -> {
+            if (e != null) {
+                Log.w("ShoppingCartFragment", "listen:error", e);
+                return;
+            }
+
+            if (snapshots != null) {
+                cartItemList.clear();
+                for (QueryDocumentSnapshot document : snapshots) {
+                    String id = document.getId();
+                    String tituloProducto = document.getString("tituloProducto");
+                    int cantidad = document.getLong("cantidad").intValue();
+                    long precioUnitario = document.getLong("precioUnitario");
+                    long precioTotal = document.getLong("precioTotal");
+                    String fotoUrl = document.getString("foto");
+
+                    CartItem cartItem = new CartItem(id, tituloProducto, cantidad, precioUnitario, precioTotal, fotoUrl);
+                    cartItemList.add(cartItem);
+                }
+                // Notificar al adaptador que los datos han cambiado
+                cartAdapter.notifyDataSetChanged();
+                // Calcular y actualizar el valor total
+                calcularValorTotal();
+            }
+        });
+    }
+    private void calcularValorTotal() {
+        long valorTotal = 0;
+        for (CartItem item : cartItemList) {
+            valorTotal += item.getPrecioTotal();
+        }
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
+        valorTotalTextView.setText(numberFormat.format(valorTotal));
+
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,11 +119,23 @@ public class ShoppingCartFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_shopping_cart, container, false);
+    @Nullable
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_shopping_cart, container, false);
+
+        // Inicializar RecyclerView y adaptador
+        cartRecyclerView = view.findViewById(R.id.cartRecyclerView);
+        cartItemList = new ArrayList<>();
+        cartAdapter = new CartAdapter(cartItemList);
+        cartRecyclerView.setAdapter(cartAdapter);
+        cartRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        valorTotalTextView = view.findViewById(R.id.valorTotalTextView);
+
+        // Aquí debes obtener los datos del carrito de Firebase y actualizar cartItemList
+        obtenerDatosDelCarrito();
+
+        return view;
     }
 }

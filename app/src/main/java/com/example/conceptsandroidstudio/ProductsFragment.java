@@ -194,21 +194,33 @@ public class ProductsFragment extends Fragment {
                     // El producto ya existe en el carrito del usuario, actualizar la cantidad
                     int cantidadActual = document.getLong("cantidad").intValue();
                     int nuevaCantidad = cantidadActual + 1;
+                    int precio = document.getLong("precioTotal").intValue();
+                    int precioTotal = precio * nuevaCantidad;
 
-                    userCartRef.update("cantidad", nuevaCantidad).addOnCompleteListener(updateTask -> {
+                    Map<String, Object> updates = new HashMap<>();
+                    updates.put("cantidad", nuevaCantidad);
+                    updates.put("precioTotal", precioTotal);
+
+                    userCartRef.update(updates).addOnCompleteListener(updateTask -> {
                         if (updateTask.isSuccessful()) {
-                            Toast.makeText(getContext(), "Cantidad actualizada en el carrito", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Cantidad y precio actualizados en el carrito", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getContext(), "Error al actualizar la cantidad en el carrito", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Error al actualizar la cantidad y precio en el carrito", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
                     // El producto no existe en el carrito del usuario, agregarlo
                     Map<String, Object> cartItem = new HashMap<>();
+                    String tituloProducto = product.getMarca() +  " " + product.getModelo() + " "  + product.getPantalla() + "\"" +
+                            product.getProcesador() + " " + product.getRam() + " " + product.getRom();
                     cartItem.put("id",product.getId());
-                    cartItem.put("modelo", product.getModelo());
-                    cartItem.put("precio", product.getPrecio());
+                    cartItem.put("tituloProducto", tituloProducto);
+                    cartItem.put("precioUnitario", product.getPrecio());
+                    cartItem.put("precioTotal", product.getPrecio());
                     cartItem.put("cantidad", 1);
+                    if (!product.getFotosUrls().isEmpty()) {
+                        cartItem.put("foto", product.getFotosUrls().get(0));
+                    }
 
                     userCartRef.set(cartItem).addOnCompleteListener(addTask -> {
                         if (addTask.isSuccessful()) {
