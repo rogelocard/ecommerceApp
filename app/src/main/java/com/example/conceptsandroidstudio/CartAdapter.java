@@ -77,12 +77,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             Glide.with(itemView)
                     .load(cartItem.getFoto())
                     .into(productImageView);
+
             decreaseButton.setOnClickListener(v -> {
                 int cantidadActual = cartItem.getCantidad();
-                if (cantidadActual >= 1) {
+                if (cantidadActual > 1) {
                     updateCartItemQuantity(cartItem, cantidadActual - 1);
+                } else if (cantidadActual == 1) {
+                    deleteCartItem(cartItem);
                 }
             });
+
 
             increaseButton.setOnClickListener(v -> {
                 int cantidadActual = cartItem.getCantidad();
@@ -95,26 +99,33 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             String userId = mAuth.getCurrentUser().getUid();
             DocumentReference cartItemRef = db.collection("user").document(userId).collection("cart").document(cartItem.getId());
 
-            if (newQuantity > 0) {
-                cartItemRef.update(
-                        "cantidad", newQuantity,
-                        "precioTotal", cartItem.getPrecioUnitario() * newQuantity
-                ).addOnSuccessListener(aVoid -> {
-                    cartItem.setCantidad(newQuantity);
-                    cartItem.setPrecioTotal(cartItem.getPrecioUnitario() * newQuantity);
-                    notifyItemChanged(getAdapterPosition());
-                }).addOnFailureListener(e -> {
-                    Log.d("CartAdapter", "Error updating document", e);
-                });
-            } else {
-                cartItemRef.delete().addOnSuccessListener(aVoid -> {
-                    int position = getAdapterPosition();
+            cartItemRef.update(
+                    "cantidad", newQuantity,
+                    "precioTotal", cartItem.getPrecioUnitario() * newQuantity
+            ).addOnSuccessListener(aVoid -> {
+                cartItem.setCantidad(newQuantity);
+                cartItem.setPrecioTotal(cartItem.getPrecioUnitario() * newQuantity);
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    notifyItemChanged(position);
+                }
+            }).addOnFailureListener(e -> {
+                Log.d("CartAdapter", "Error updating document", e);
+            });
+        }
+        private void deleteCartItem(CartItem cartItem) {
+            String userId = mAuth.getCurrentUser().getUid();
+            DocumentReference cartItemRef = db.collection("user").document(userId).collection("cart").document(cartItem.getId());
+
+            cartItemRef.delete().addOnSuccessListener(aVoid -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
                     cartItemList.remove(position);
                     notifyItemRemoved(position);
-                }).addOnFailureListener(e -> {
-                    Log.d("CartAdapter", "Error deleting document", e);
-                });
-            }
+                }
+            }).addOnFailureListener(e -> {
+                Log.d("CartAdapter", "Error deleting document", e);
+            });
         }
     }
 }

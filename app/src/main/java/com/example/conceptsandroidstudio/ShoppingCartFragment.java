@@ -14,12 +14,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -37,6 +40,7 @@ public class ShoppingCartFragment extends Fragment {
     private CartAdapter cartAdapter;
     private List<CartItem> cartItemList;
     private TextView valorTotalTextView;
+    private Button vaciarCarritoButton;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -69,7 +73,38 @@ public class ShoppingCartFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+    @Override
+    @Nullable
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_shopping_cart, container, false);
 
+        // Inicializar RecyclerView y adaptador
+        cartRecyclerView = view.findViewById(R.id.cartRecyclerView);
+        cartItemList = new ArrayList<>();
+        cartAdapter = new CartAdapter(cartItemList);
+        cartRecyclerView.setAdapter(cartAdapter);
+        cartRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        valorTotalTextView = view.findViewById(R.id.valorTotalTextView);
+
+        // Inicializar botón para vaciar carrito
+        vaciarCarritoButton = view.findViewById(R.id.vaciarCarrito);
+        vaciarCarritoButton.setOnClickListener(v -> vaciarCarrito());
+
+        // Aquí debes obtener los datos del carrito de Fire
+        // base y actualizar cartItemList
+        obtenerDatosDelCarrito();
+
+        return view;
+    }
     private void obtenerDatosDelCarrito() {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         CollectionReference cartRef = FirebaseFirestore.getInstance().collection("user").document(userId).collection("cart");
@@ -96,6 +131,7 @@ public class ShoppingCartFragment extends Fragment {
                 }
                 // Notificar al adaptador que los datos han cambiado
                 cartAdapter.notifyDataSetChanged();
+
                 // Calcular y actualizar el valor total
                 calcularValorTotal();
             }
@@ -110,32 +146,31 @@ public class ShoppingCartFragment extends Fragment {
         valorTotalTextView.setText(numberFormat.format(valorTotal));
 
     }
+    private void vaciarCarrito() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        CollectionReference cartRef = FirebaseFirestore.getInstance().collection("user").document(userId).collection("cart");
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-    @Override
-    @Nullable
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_shopping_cart, container, false);
-
-        // Inicializar RecyclerView y adaptador
-        cartRecyclerView = view.findViewById(R.id.cartRecyclerView);
-        cartItemList = new ArrayList<>();
-        cartAdapter = new CartAdapter(cartItemList);
-        cartRecyclerView.setAdapter(cartAdapter);
-        cartRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        valorTotalTextView = view.findViewById(R.id.valorTotalTextView);
-
-        // Aquí debes obtener los datos del carrito de Firebase y actualizar cartItemList
-        obtenerDatosDelCarrito();
-
-        return view;
+        cartRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                WriteBatch batch = FirebaseFirestore.getInstance().batch();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    batch.delete(document.getReference());
+                }
+                batch.commit().addOnCompleteListener(batchTask -> {
+                    if (batchTask.isSuccessful()) {
+                        cartItemList.clear();
+                        cartAdapter.notifyDataSetChanged();
+                        calcularValorTotal();
+                        Toast.makeText(getContext(), "Carrito vaciado", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.w("ShoppingCartFragment", "Error vaciando el carrito", batchTask.getException());
+                        Toast.makeText(getContext(), "Error al vaciar el carrito", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                Log.w("ShoppingCartFragment", "Error obteniendo items del carrito", task.getException());
+                Toast.makeText(getContext(), "Error al obtener los items del carrito", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
