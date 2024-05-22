@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,6 +33,8 @@ public class SignupActivity extends AppCompatActivity {
 
     ImageButton btn_registro;
     EditText nombre, email , password , confirmpasword ;
+
+    TextView currentuser;
 
     FirebaseFirestore db;
     FirebaseAuth mAuth;
@@ -56,6 +59,7 @@ public class SignupActivity extends AppCompatActivity {
         password = findViewById(R.id.password_reg);
         confirmpasword = findViewById(R.id.password_cof);
         btn_registro = findViewById(R.id.signupButton);
+        currentuser = findViewById(R.id.current_user);
 
         btn_registro.setOnClickListener(new View.OnClickListener() {
 
@@ -83,6 +87,15 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
+
+        currentuser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignupActivity.this,LoginActivity.class));
+            }
+        });
+
+
     }
 
     private void registrouser(String nameuser, String emailuser, String paswordUser) {

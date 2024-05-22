@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +24,8 @@ public class LoginActivity extends AppCompatActivity{
     EditText email, pasword;
     FirebaseAuth mAuth;
 
+    TextView registro;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -33,6 +36,7 @@ public class LoginActivity extends AppCompatActivity{
         btn_login= findViewById(R.id.login);
         email= findViewById(R.id.editTextText);
         pasword= findViewById(R.id.editTextTextpassword);
+        registro= findViewById(R.id.new_user);
 
 
 
@@ -52,6 +56,14 @@ public class LoginActivity extends AppCompatActivity{
                 }
             }
         });
+
+        registro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this,SignupActivity.class));
+            }
+        });
+
 
     }
     private void loginUser(String emailUser, String password){
