@@ -70,7 +70,7 @@ public class AccountFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-       super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -78,7 +78,7 @@ public class AccountFragment extends Fragment {
 
 
 
-        db = FirebaseFirestore.getInstance();
+        this.db = FirebaseFirestore.getInstance();
         this.mAuth1 = FirebaseAuth.getInstance();
 
 
@@ -93,6 +93,11 @@ public class AccountFragment extends Fragment {
 
         exit1=rootView.findViewById(R.id.buttonexit);
         delete=rootView.findViewById(R.id.deleteUser);
+
+
+        if(db == null){
+            db= FirebaseFirestore.getInstance();
+        }
 
 //Cerramos Sesión
         exit1.setOnClickListener(new View.OnClickListener() {
@@ -110,8 +115,12 @@ public class AccountFragment extends Fragment {
         });
 //Eliminamos el Usuario
         delete.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
+
             public void onClick(View v) {
+
                 FirebaseUser loginUser = mAuth1.getCurrentUser();
 
 
@@ -131,6 +140,7 @@ public class AccountFragment extends Fragment {
                                                 public void onSuccess(Void unused) {
                                                     // Redirigir al usuario a LoginActivity
                                                     Intent intent = new Intent(requireContext(), LoginActivity.class);
+                                                    Toast.makeText(requireContext(), "Cuenta Eliminada con exito", Toast.LENGTH_SHORT).show();
                                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                     startActivity(intent);
                                                     requireActivity().finish();
@@ -164,15 +174,15 @@ public class AccountFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
 
+        super.onViewCreated(view, savedInstanceState);
+        FirebaseUser currentUser = mAuth1.getCurrentUser();
 
-        String userId1 = mAuth1.getCurrentUser().getUid();
-
-        if (userId1 != null) {
+        if (currentUser != null) {
 
 
             String userId = mAuth1.getCurrentUser().getUid();
 
-
+if(db != null){
             db.collection("user").document(userId)
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
@@ -195,7 +205,7 @@ public class AccountFragment extends Fragment {
                     .addOnFailureListener(e -> {
                         Toast.makeText(requireContext(), "Error al consultar Firestore", Toast.LENGTH_SHORT).show();
                     });
-        }
+        }}
 
         else {
 

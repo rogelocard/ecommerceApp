@@ -56,9 +56,9 @@
                 android:layout_height="50dp"
                 android:background="@color/white"
                 android:paddingLeft="10dp"
-
-                android:textColor="#0000FF"
-                android:textStyle="bold" />
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="italic" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -77,9 +77,9 @@
                 android:layout_height="50dp"
                 android:background="@color/white"
                 android:paddingLeft="10dp"
-
-                android:textColor="#0000FF"
-                android:textStyle="bold" />
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="italic" />
 
 
         </LinearLayout>
@@ -88,7 +88,7 @@
 
         <Button
             android:id="@+id/buttonexit"
-            android:layout_width="150dp"
+            android:layout_width="200dp"
             android:layout_height="50dp"
             android:text="Cerrar Sesión"
             android:background="@drawable/btn_background2"
