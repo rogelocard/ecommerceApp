@@ -35,9 +35,11 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/direccion"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             app:cardBackgroundColor="#DDA5FF">
+<!--            android:layout_height="100dp"-->
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,6 +60,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/add_address_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@color/white"
@@ -65,6 +68,14 @@
                     android:text="+ Añadir Nueva dirección"
                     android:textColor="#0000FF"
                     android:textStyle="bold" />
+
+                <!-- Container for listing addresses -->
+                <LinearLayout
+                    android:id="@+id/address_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp" />
 
 
             </LinearLayout>

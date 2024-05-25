@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -15,6 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ConceptsAndroidStudio"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.mapbox.token"
+            android:value="pk.eyJ1IjoidGVjaHkzNDMiLCJhIjoiY2x3azc2enFyMDB6eDJpcGh4MHljNzZmaSJ9.g6k45OVyjK8I8uxebAFx8g" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
