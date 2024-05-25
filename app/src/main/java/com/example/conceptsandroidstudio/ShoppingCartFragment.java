@@ -160,6 +160,7 @@ public class ShoppingCartFragment extends Fragment {
         // base y actualizar cartItemList
         obtenerDatosDelCarrito();
         
+//        TextView addAddressTextView = view.findViewById(R.id.add_address_text_view);
         TextView addAddressTextView = view.findViewById(R.id.add_address_text_view);
         addressContainer = view.findViewById(R.id.address_container);
 
