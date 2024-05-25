@@ -18,6 +18,7 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
+
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ProductViewHolder> {
 
     private List<Product> productList;
