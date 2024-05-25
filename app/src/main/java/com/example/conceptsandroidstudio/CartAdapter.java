@@ -105,10 +105,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             ).addOnSuccessListener(aVoid -> {
                 cartItem.setCantidad(newQuantity);
                 cartItem.setPrecioTotal(cartItem.getPrecioUnitario() * newQuantity);
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    notifyItemChanged(position);
-                }
+
             }).addOnFailureListener(e -> {
                 Log.d("CartAdapter", "Error updating document", e);
             });
@@ -121,7 +118,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     cartItemList.remove(position);
-                    notifyItemRemoved(position);
                 }
             }).addOnFailureListener(e -> {
                 Log.d("CartAdapter", "Error deleting document", e);

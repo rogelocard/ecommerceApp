@@ -139,8 +139,10 @@ public class ShoppingCartFragment extends Fragment {
     }
     private void calcularValorTotal() {
         long valorTotal = 0;
-        for (CartItem item : cartItemList) {
-            valorTotal += item.getPrecioTotal();
+        if(cartItemList !=null){
+            for (CartItem item : cartItemList) {
+                valorTotal += item.getPrecioTotal();
+            }
         }
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("es", "CO"));
         valorTotalTextView.setText(numberFormat.format(valorTotal));

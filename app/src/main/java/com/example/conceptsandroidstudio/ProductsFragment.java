@@ -48,38 +48,21 @@ import coil.request.ImageRequest;
  */
 public class ProductsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private static final String TAG = "PortatilesActivity";
+    private static final String TAG = "ProductsFragment";
 
     private View rootView;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public ProductsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment productsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ProductsFragment newInstance(String param1, String param2) {
         ProductsFragment fragment = new ProductsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString("param1", param1);
+        args.putString("param2", param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,8 +71,8 @@ public class ProductsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            String mParam1 = getArguments().getString("param1");
+            String mParam2 = getArguments().getString("param2");
         }
 
         // Inicializar Firebase Firestore
@@ -102,7 +85,6 @@ public class ProductsFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_products, container, false);
 
         RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
         List<MyItem> itemList = new ArrayList<>();
         itemList.add(new MyItem(R.drawable.image_portatil, "Pc"));
@@ -113,66 +95,61 @@ public class ProductsFragment extends Fragment {
 
         MyAdapter adapter = new MyAdapter(itemList);
         recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
+        // Configura el segundo RecyclerView solo cuando los datos de Firestore estén disponibles
         obtenerDatosDeFirestore();
 
         return rootView;
     }
 
-    private void obtenerDatosDeFirestore(){
+    private void obtenerDatosDeFirestore() {
         // Obtener una referencia a la colección "portatiles" en Firebase Firestore
         CollectionReference portatilesRef = db.collection("portatiles");
 
         // Obtener los documentos de la colección "portatiles"
-        portatilesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    List<Product> productList = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String marca = document.getString("marca");
-                        String modelo = document.getString("modelo");
-                        Long precio = document.getLong("precio");
-                        List<String> fotosUrls = (List<String>) document.get("fotos");
-                        String procesador = document.getString("procesador");
-                        String ram = document.getString("ram");
-                        String rom = document.getString("rom");
-                        String color = document.getString("color");
-                        String sistemaOperativo = document.getString("sistemaOpe");
-                        Long pantallaLong = document.getLong("pantalla");
-                        int pantalla = pantallaLong != null ? pantallaLong.intValue() : 0;
-                        String id = document.getString("id");
+        portatilesRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<Product> productList = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String marca = document.getString("marca");
+                    String modelo = document.getString("modelo");
+                    Long precio = document.getLong("precio");
+                    List<String> fotosUrls = (List<String>) document.get("fotos");
+                    String procesador = document.getString("procesador");
+                    String ram = document.getString("ram");
+                    String rom = document.getString("rom");
+                    String color = document.getString("color");
+                    String sistemaOperativo = document.getString("sistemaOpe");
+                    Long pantallaLong = document.getLong("pantalla");
+                    int pantalla = pantallaLong != null ? pantallaLong.intValue() : 0;
+                    String id = document.getString("id");
 
-                        // Crear un nuevo objeto Product con todos los campos
-                        Product product = new Product(marca, modelo, precio, fotosUrls,
-                                procesador, ram, rom, color,
-                                sistemaOperativo, pantalla, id);
-
-                        productList.add(product);
-                    }
-                    setupProductsRecyclerView(productList);
-                    Context context = getContext();
-                    if (context != null) {
-                        Toast.makeText(context, "Datos cargados", Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
-                    Context context = getContext();
-                    if (context != null) {
-                        Toast.makeText(context, "Error obteniendo documentos", Toast.LENGTH_LONG).show();
-                    }
+                    // Crear un nuevo objeto Product con todos los campos
+                    Product product = new Product(marca, modelo, precio, fotosUrls, procesador, ram, rom, color, sistemaOperativo, pantalla, id);
+                    productList.add(product);
+                }
+                setupProductsRecyclerView(productList);
+                Context context = getContext();
+                if (context != null) {
+                    Toast.makeText(context, "Datos cargados", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Log.d(TAG, "Error getting documents: ", task.getException());
+                Context context = getContext();
+                if (context != null) {
+                    Toast.makeText(context, "Error obteniendo documentos", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
+
     private void setupProductsRecyclerView(List<Product> productList) {
         RecyclerView productsRecyclerView = rootView.findViewById(R.id.productsRecyclerView);
         productsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         ProductsAdapter productsAdapter = new ProductsAdapter(productList);
         productsAdapter.setOnAddToCartClickListener(product -> {
-            // Mostrar detalles del producto
             showProductDetails(product);
-            // O agregar directamente al carrito, dependiendo de tu flujo
             addToCart(product);
         });
         productsRecyclerView.setAdapter(productsAdapter);
@@ -211,9 +188,9 @@ public class ProductsFragment extends Fragment {
                 } else {
                     // El producto no existe en el carrito del usuario, agregarlo
                     Map<String, Object> cartItem = new HashMap<>();
-                    String tituloProducto = product.getMarca() +  " " + product.getModelo() + " "  + product.getPantalla() + "\"" +
+                    String tituloProducto = product.getMarca() + " " + product.getModelo() + " " + product.getPantalla() + "\"" +
                             product.getProcesador() + " " + product.getRam() + " " + product.getRom();
-                    cartItem.put("id",product.getId());
+                    cartItem.put("id", product.getId());
                     cartItem.put("tituloProducto", tituloProducto);
                     cartItem.put("precioUnitario", product.getPrecio());
                     cartItem.put("precioTotal", product.getPrecio());
