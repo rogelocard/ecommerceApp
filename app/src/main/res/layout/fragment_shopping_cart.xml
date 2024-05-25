@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
+      
+        <!-- Imagen del carrito -->
 
         <androidx.cardview.widget.CardView
             android:id="@+id/confirmacion"
@@ -29,53 +31,50 @@
                 android:textSize="20sp" />
 
         </androidx.cardview.widget.CardView>
+        
 
-        <ScrollView
+        <androidx.cardview.widget.CardView
+            android:id="@+id/direccion"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:cardBackgroundColor="#DDA5FF">
+          <!--            android:layout_height="100dp"-->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_marginStart="10dp"
+                android:background="@color/purple_light"
+                android:orientation="vertical">
 
-                <!-- Imagen del carrito -->
-
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/direccion"
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginBottom="10dp"
-                    app:cardBackgroundColor="#DDA5FF">
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="Dirección de entrega"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        android:background="@color/purple_light"
-                        android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:paddingLeft="10dp"
+                    android:text="+ Añadir Nueva dirección"
+                    android:textColor="#0000FF"
+                    android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@color/white"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="10dp"
-                            android:text="Dirección de entrega"
-                            android:textColor="#000000"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@color/white"
-                            android:paddingLeft="10dp"
-                            android:text="+ Añadir Nueva dirección"
-                            android:textColor="#0000FF"
-                            android:textStyle="bold" />
+              <!-- Container for listing addresses -->
+               <LinearLayout
+                    android:id="@+id/address_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp" />
 
 
                     </LinearLayout>
